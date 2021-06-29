@@ -3,7 +3,11 @@ import AppLoading from "expo-app-loading";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, Pressable } from "react-native";
 import Login from "./components/login/login";
-
+import Home from "./components/home/home";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import globalStore from "./functions/globalStore";
+import context from "./functions/context";
 const fetchFonts = () => {
   return Font.loadAsync({
     "poppins-black": require("./fonts/Poppins-Black.ttf"),
@@ -18,7 +22,11 @@ const fetchFonts = () => {
   });
 };
 
+const AuthStack = createStackNavigator();
+
 export default function App() {
+  const store = globalStore();
+  const initial = store.isLogged ? "Home" : "SignIn";
   const [dataLoader, setDataLoader] = useState(false);
   if (!dataLoader) {
     return (
@@ -29,5 +37,22 @@ export default function App() {
       />
     );
   }
-  return <Login />;
+  return (
+    <context.Provider value={store}>
+      <NavigationContainer>
+        <AuthStack.Navigator initialRouteName={initial}>
+          <AuthStack.Screen
+            name="SignIn"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <AuthStack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerShown: false, title: "Home" }}
+          />
+        </AuthStack.Navigator>
+      </NavigationContainer>
+    </context.Provider>
+  );
 }
