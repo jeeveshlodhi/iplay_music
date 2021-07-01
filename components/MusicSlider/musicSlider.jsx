@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, Image, ImageComponent} from "react-native";
+import { Text, View, Image} from "react-native";
 import styles from "./musicSliderStyle";
 import { FlatList } from "react-native-gesture-handler";
 import { songs } from "../../config";
@@ -7,15 +7,13 @@ import { songs } from "../../config";
 data = []
 for(let i=0;i<songs.length;i++){
   data.push({
-    key : i.toString(),
+    key : songs[i]["thumbnail"],
   })
 }
 
-console.log(data)
-
 function Slide({ data }) {
-    let imgName = "../../assets/thumbnail/" + songs[data]["thumbnail"];
-    console.log(imgName)
+    console.log(data)
+
     return (
       <View
         style={{
@@ -25,7 +23,7 @@ function Slide({ data }) {
         }}
       >
         <Image
-          source={require("../../assets/thumbnail/IsQadar.jpg")  }
+          source={{uri :data}}
           style = {{width: 150, height: 150, borderRadius: 10 }}
         ></Image>
       </View>
@@ -33,13 +31,15 @@ function Slide({ data }) {
 }
 
 function MusicSlider() {
+    console.log(data)
     return(
         <View style = {data}>
             <Text style = {styles.heading}>Latest Songs</Text>
             <FlatList
                 data = {data}
                 renderItem = {(item) => {
-                    return <Slide data={item.index} />
+                    console.log(item)
+                    return <Slide data={item.item["key"]} />
                 }}
                 horizontal
                 showsVerticalScrollIndicator = {false}

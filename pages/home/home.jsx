@@ -11,7 +11,7 @@ function Home() {
     return (
         <context.Provider>
             <Header/>
-            <ScrollView>
+            <ScrollView style={{padding:10}}>
               <MusicSlider/>
               <MusicSlider/>
               <MusicSlider/>
